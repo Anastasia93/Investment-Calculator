@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import InputGroup from "./InputGroup";
 
-const LABELS = [
-  'Initial Investment',
-  'Annual Investment',
-  'Expected Return',
-  'Duration'
-];
+const LABELS = {
+  initialState: 'Initial Investment',
+  annualInvestment: 'Annual Investment',
+  expectedReturn: 'Expected Return',
+  duration: 'Duration'
+};
 
 export default function UserInput() {
   const [userInput, setUserInput] = useState({
@@ -16,8 +16,23 @@ export default function UserInput() {
     duration: 10
   });
 
+  const { initialState, annualInvestment } = LABELS;
+  const firstRawInputs = { initialState, annualInvestment };
+
+  const { expectedReturn, duration } = LABELS;
+  const secondRawInputs = { expectedReturn, duration };
+
+  function handleChange(inputIdentifier, newValue) {
+    setUserInput(previousUserInput => {
+      return {
+        ...previousUserInput,
+        [inputIdentifier]: newValue
+      }
+    });
+  };
+
   return <section id="user-input">
-    <InputGroup labels={LABELS.slice(0, 2)} />
-    <InputGroup labels={LABELS.slice(2)} />
+    <InputGroup labels={firstRawInputs} changeHandler={handleChange} values={userInput}/>
+    <InputGroup labels={secondRawInputs} changeHandler={handleChange} values={userInput}/>
   </section>
 }
